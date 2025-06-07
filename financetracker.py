@@ -265,11 +265,31 @@ def set_tax_rate():
         print("Invalid input. Please enter a number.")
 
 # Main program starts here
-print("Personal Finance Tracker")
-print("=" * 30)
+print("💰 Personal Finance Tracker 💰")
+print("=" * 40)
+
+# Ask for user's name
+user_name = input("Welcome! Please enter your name: ")
+print(f"\nHello, {user_name}! Let's manage your finances.")
+
+# Make income entry mandatory
+print("\n📋 Initial Setup (Required)")
+print("-" * 30)
+print("Please enter your income to continue.")
+add_income()
+
+# Check if user wants to set savings goal and tax rate immediately
+print("\nWould you like to set up your financial goals now?")
+setup_choice = input("Set savings goal and tax rate? (y/n): ").lower()
+
+if setup_choice == 'y':
+    set_savings_goal()
+    set_tax_rate()
+else:
+    print(f"Using default settings: {savings_goal}% savings goal, {tax_rate}% tax rate")
 
 while True:
-    print("\nMenu:")
+    print(f"\nMenu for {user_name}:")
     print("1. Add Transaction")
     print("2. Add Income")
     print("3. View Transactions")
@@ -277,8 +297,8 @@ while True:
     print("5. Show Pie Chart")
     print("6. Show Bar Chart")
     print("7. Create Sample Data")
-    print("8. Set Savings Goal (currently {}%)".format(savings_goal))
-    print("9. Set Tax Rate (currently {}%)".format(tax_rate))
+    print("8. Set Savings Goal (currently {:.1f}%)".format(savings_goal))
+    print("9. Set Tax Rate (currently {:.1f}%)".format(tax_rate))
     print("10. Exit")
     
     choice = input("Choose option (1-10): ")
@@ -302,7 +322,7 @@ while True:
     elif choice == "9":
         set_tax_rate()
     elif choice == "10":
-        print("Goodbye! Keep saving! 💰")
+        print(f"Goodbye, {user_name}! Keep saving! 💰")
         break
     else:
         print("Invalid choice!")
