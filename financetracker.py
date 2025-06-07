@@ -22,7 +22,7 @@ def save_settings(savings_goal, tax_rate):
 savings_goal, tax_rate = load_settings()
 
 def add_transaction():
-    """Add a new transaction"""
+    """Add a new transaction (excluding income)"""
     print("\nAdd New Transaction")
     print("-" * 20)
     
@@ -35,9 +35,8 @@ def add_transaction():
     print("3. Entertainment")
     print("4. Shopping")
     print("5. Bills")
-    print("6. Income")
     
-    choice = int(input("Select category (1-6): "))
+    choice = int(input("Select category (1-5): "))
     
     if choice == 1:
         category = "Food"
@@ -50,7 +49,8 @@ def add_transaction():
     elif choice == 5:
         category = "Bills"
     else:
-        category = "Income"
+        print("Invalid category. Defaulting to 'Other'.")
+        category = "Other"
     
     # Save to CSV
     new_data = pd.DataFrame({
@@ -106,22 +106,15 @@ def show_pie_chart():
     """Show pie chart of spending including savings"""
     try:
         data = pd.read_csv('transactions.csv')
-        
-        # Calculate totals
         total_income = data[data['Category'] == 'Income']['Amount'].sum()
         expenses = data[data['Category'] != 'Income']
         total_spent = expenses['Amount'].sum()
         saved = total_income - total_spent
-        
-        # Create spending by category including savings
         category_spending = expenses.groupby('Category')['Amount'].sum().to_dict()
         if saved > 0:
             category_spending['Savings'] = saved
-        
-        # Create pie chart
         labels = list(category_spending.keys())
         values = list(category_spending.values())
-        
         plt.figure(figsize=(10, 7))
         plt.pie(values, labels=labels, autopct='%1.1f%%')
         plt.title('Spending and Savings by Category')
@@ -132,33 +125,24 @@ def show_pie_chart():
         print(f"No data to show!")
 
 def show_bar_chart():
-    """Show bar chart of spending including savings target"""
+    """Show bar chart of spending, actual savings, and target savings"""
     try:
         data = pd.read_csv('transactions.csv')
-        
-        # Calculate totals
         total_income = data[data['Category'] == 'Income']['Amount'].sum()
         expenses = data[data['Category'] != 'Income']
         total_spent = expenses['Amount'].sum()
         saved = total_income - total_spent
         target_savings = total_income * (savings_goal / 100)
-        
-        # Create spending by category
         category_spending = expenses.groupby('Category')['Amount'].sum().to_dict()
-        
-        # Add savings
-        if saved > 0:
-            category_spending['Actual Savings'] = saved
-        else:
-            category_spending['Actual Savings'] = 0
-            
+        # Add savings bars
+        category_spending['Actual Savings'] = saved if saved > 0 else 0
         category_spending['Target Savings'] = target_savings
-        
-        # Create bar chart
         plt.figure(figsize=(12, 7))
-        plt.bar(range(len(category_spending)), list(category_spending.values()))
-        plt.xticks(range(len(category_spending)), list(category_spending.keys()), rotation=45)
-        plt.title('Spending and Savings by Category')
+        bars = plt.bar(category_spending.keys(), category_spending.values(), color=['#4e79a7']*len(category_spending))
+        # Highlight savings bars
+        bars[-2].set_color('#59a14f')  # Actual Savings
+        bars[-1].set_color('#f28e2b')  # Target Savings
+        plt.title('Spending, Actual Savings, and Target Savings')
         plt.xlabel('Category')
         plt.ylabel('Amount (₹)')
         plt.tight_layout()
@@ -170,28 +154,19 @@ def show_summary():
     """Show spending summary with savings goals and tax calculations"""
     try:
         data = pd.read_csv('transactions.csv')
-        
         total_spent = 0
         total_income = 0
-        
         for i in range(len(data)):
             if data.iloc[i]['Category'] == 'Income':
                 total_income = total_income + data.iloc[i]['Amount']
             else:
                 total_spent = total_spent + data.iloc[i]['Amount']
-        
-        # Calculate savings
         saved = total_income - total_spent
         savings_percentage = (saved / total_income * 100) if total_income > 0 else 0
-        
-        # Calculate tax
         estimated_tax = total_income * (tax_rate / 100)
         after_tax_income = total_income - estimated_tax
-        
-        # Target savings
         target_savings = total_income * (savings_goal / 100)
         savings_difference = saved - target_savings
-        
         print("\n💰 Financial Summary")
         print("=" * 30)
         print(f"Total Income: ₹{total_income:.2f}")
@@ -201,7 +176,6 @@ def show_summary():
         print(f"Money Saved: ₹{saved:.2f} ({savings_percentage:.1f}%)")
         print("-" * 30)
         print(f"Savings Goal: {savings_goal}% (₹{target_savings:.2f})")
-        
         if savings_difference >= 0:
             print(f"✅ Congratulations! You exceeded your savings goal by ₹{savings_difference:.2f}")
             if savings_percentage > 30:
@@ -211,9 +185,16 @@ def show_summary():
         else:
             print(f"❌ You missed your savings goal by ₹{abs(savings_difference):.2f}")
             print("💡 Tip: Try to reduce spending in your largest expense category.")
-        
     except:
         print("No data to show!")
+
+def show_saving_goals():
+    """Show current savings goal and tax rate"""
+    print("\n🎯 Your Current Financial Goals")
+    print("=" * 30)
+    print(f"Savings Goal: {savings_goal}% of your income")
+    print(f"Tax Rate: {tax_rate}%")
+    print("You can update these anytime from the menu.")
 
 def create_sample_data():
     """Create sample data for testing"""
@@ -222,7 +203,6 @@ def create_sample_data():
         'Amount': [10000, 1500, 800, 400, 1200, 900],
         'Category': ['Income', 'Food', 'Transportation', 'Entertainment', 'Shopping', 'Bills']
     })
-    
     sample_data.to_csv('transactions.csv', index=False)
     print("Sample data created!")
 
@@ -232,13 +212,11 @@ def set_savings_goal():
     print("\nSet Savings Goal")
     print("-" * 20)
     print(f"Current savings goal: {savings_goal}%")
-    
     try:
         new_goal = float(input("Enter new savings goal percentage: "))
         if new_goal < 0 or new_goal > 100:
             print("Savings goal must be between 0 and 100%")
             return
-        
         savings_goal = new_goal
         save_settings(savings_goal, tax_rate)
         print(f"Savings goal updated to {savings_goal}%")
@@ -251,13 +229,11 @@ def set_tax_rate():
     print("\nSet Income Tax Rate")
     print("-" * 20)
     print(f"Current tax rate: {tax_rate}%")
-    
     try:
         new_rate = float(input("Enter income tax percentage: "))
         if new_rate < 0 or new_rate > 100:
             print("Tax rate must be between 0 and 100%")
             return
-        
         tax_rate = new_rate
         save_settings(savings_goal, tax_rate)
         print(f"Tax rate updated to {tax_rate}%")
@@ -296,12 +272,13 @@ while True:
     print("4. Show Summary")
     print("5. Show Pie Chart")
     print("6. Show Bar Chart")
-    print("7. Create Sample Data")
-    print("8. Set Savings Goal (currently {:.1f}%)".format(savings_goal))
-    print("9. Set Tax Rate (currently {:.1f}%)".format(tax_rate))
-    print("10. Exit")
+    print("7. Show Saving Goals")
+    print("8. Create Sample Data")
+    print("9. Set Savings Goal (currently {:.1f}%)".format(savings_goal))
+    print("10. Set Tax Rate (currently {:.1f}%)".format(tax_rate))
+    print("11. Exit")
     
-    choice = input("Choose option (1-10): ")
+    choice = input("Choose option (1-11): ")
     
     if choice == "1":
         add_transaction()
@@ -316,12 +293,14 @@ while True:
     elif choice == "6":
         show_bar_chart()
     elif choice == "7":
-        create_sample_data()
+        show_saving_goals()
     elif choice == "8":
-        set_savings_goal()
+        create_sample_data()
     elif choice == "9":
-        set_tax_rate()
+        set_savings_goal()
     elif choice == "10":
+        set_tax_rate()
+    elif choice == "11":
         print(f"Goodbye, {user_name}! Keep saving! 💰")
         break
     else:
