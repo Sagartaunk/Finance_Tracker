@@ -7,7 +7,7 @@ def add_transaction():
     print("-" * 20)
     
     description = input("Enter description: ")
-    amount = float(input("Enter amount: $"))
+    amount = float(input("Enter amount: ₹"))
     
     print("\nCategories:")
     print("1. Food")
@@ -46,7 +46,31 @@ def add_transaction():
         all_data = new_data
     
     all_data.to_csv('transactions.csv', index=False)
-    print(f"Added: {description} - ${amount}")
+    print(f"Added: {description} - ₹{amount}")
+
+def add_income():
+    """Add income entry"""
+    print("\nAdd Income")
+    print("-" * 20)
+    
+    source = input("Enter income source (e.g., Salary, Freelance): ")
+    amount = float(input("Enter amount: ₹"))
+    
+    # Save to CSV
+    new_data = pd.DataFrame({
+        'Description': [source],
+        'Amount': [amount],
+        'Category': ['Income']
+    })
+    
+    try:
+        existing_data = pd.read_csv('transactions.csv')
+        all_data = pd.concat([existing_data, new_data])
+    except:
+        all_data = new_data
+    
+    all_data.to_csv('transactions.csv', index=False)
+    print(f"Added income: {source} - ₹{amount}")
 
 def view_transactions():
     """Show all transactions"""
@@ -81,7 +105,7 @@ def show_bar_chart():
         plt.bar(spending.index, spending.values)
         plt.title('Spending by Category')
         plt.xlabel('Category')
-        plt.ylabel('Amount ($)')
+        plt.ylabel('Amount (₹)')
         plt.xticks(rotation=45)
         plt.tight_layout()
         plt.show()
@@ -104,9 +128,9 @@ def show_summary():
         
         print("\nSummary:")
         print("-" * 20)
-        print(f"Total Income: ${total_income}")
-        print(f"Total Spent: ${total_spent}")
-        print(f"Money Left: ${total_income - total_spent}")
+        print(f"Total Income: ₹{total_income}")
+        print(f"Total Spent: ₹{total_spent}")
+        print(f"Money Left: ₹{total_income - total_spent}")
         
     except:
         print("No data to show!")
@@ -129,28 +153,31 @@ print("=" * 30)
 while True:
     print("\nMenu:")
     print("1. Add Transaction")
-    print("2. View Transactions")
-    print("3. Show Summary")
-    print("4. Show Pie Chart")
-    print("5. Show Bar Chart")
-    print("6. Create Sample Data")
-    print("7. Exit")
+    print("2. Add Income")
+    print("3. View Transactions")
+    print("4. Show Summary")
+    print("5. Show Pie Chart")
+    print("6. Show Bar Chart")
+    print("7. Create Sample Data")
+    print("8. Exit")
     
-    choice = input("Choose option (1-7): ")
+    choice = input("Choose option (1-8): ")
     
     if choice == "1":
         add_transaction()
     elif choice == "2":
-        view_transactions()
+        add_income()
     elif choice == "3":
-        show_summary()
+        view_transactions()
     elif choice == "4":
-        show_pie_chart()
+        show_summary()
     elif choice == "5":
-        show_bar_chart()
+        show_pie_chart()
     elif choice == "6":
-        create_sample_data()
+        show_bar_chart()
     elif choice == "7":
+        create_sample_data()
+    elif choice == "8":
         print("Goodbye!")
         break
     else:
