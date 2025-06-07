@@ -7,7 +7,6 @@ A simple Python application for tracking personal income and expenses with data 
 **Created by:**
 - **Sagar Taunk** ([@Sagartaunk](https://github.com/Sagartaunk)) 
 - **Adamya Thakur** 
-- **Soham Guleria** 
 
 **Project Type:** School Assignment  
 **Subject:** Data Analytics with Python  
