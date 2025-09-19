@@ -1,112 +1,94 @@
-# Finance Tracker (Class 12 IP Project)
+# Finance Tracker
 
-A simple command-line program to track income and expenses using CSV files. It shows summaries and basic charts so you can understand where your money goes.
+A simple **command-line based personal finance tracker** built as a **Class 12 Computer Science project**.
+The program helps users manage their income, expenses, and savings goals while also giving visual insights through **pie charts** and **bar charts**.
 
-Made by: Sagar Taunk (https://github.com/Sagartaunk)
-         Adamya Thakur
-For: Class 12th Informatics Practices (IP) project
+---
 
-## What it does
+## 👨‍💻 Authors
+- **[Sagar Taunk](https://github.com/sagartaunk)**
+- **Adamya Thakur**
 
-- Add Expense (Food, Transportation, Entertainment, Shopping, Others)
-- Add Income
-- View all transactions
-- Show Summary (Income, Expenses, Saved, Savings Goal Target, Estimated Tax)
-- Show Pie Chart of expenses by category
-- Show Bar Chart (expense categories + Actual Savings + Target Savings)
-- Set Savings Goal (%)
-- Set Tax Rate (%)
-- Saves and loads data from CSV files
+---
 
-## Requirements
+## 🎯 Project Goal
+This project was created as part of a **Class 12 Computer Science assignment** to demonstrate:
+- File handling with **CSV files**
+- Use of **pandas** for data management
+- Basic **matplotlib** charts for visualization
+- Control flow, loops, and exception handling in Python
 
-- Python
-- pandas
-- matplotlib
+---
 
-Install packages:
+## ⚡ Features
+1. **Add Transaction** – Record expenses under categories like Food, Transportation, Shopping, etc.
+2. **Add Income** – Log new income sources.
+3. **View Transactions** – Display all past transactions.
+4. **Show Summary** – Get a quick overview of income, expenses, savings, and estimated tax.
+5. **Pie Chart** – Visualize expense distribution by category.
+6. **Bar Chart** – Compare expenses, actual savings, and target savings.
+7. **Show Savings Goal** – Display current savings goal and tax rate.
+8. **Update Settings** – Change savings goal and tax rate anytime.
+9. **Persistent Data** – All data is stored in **CSV files** (`transactions.csv` and `settings.csv`).
 
-```bash
-pip install pandas matplotlib
+---
+
+## 📂 Files
+- **`finance_tracker.py`** → The main program file.
+- **`transactions.csv`** → Stores all income and expense transactions.
+- **`settings.csv`** → Stores user settings (savings goal, tax rate).
+
+---
+
+## 🛠️ Technologies Used
+- **Python 3.x**
+- **pandas** → For handling CSV files
+- **matplotlib** → For plotting charts
+
+---
+
+## 🚀 How to Run
+1. Clone the repo or download the code:
+   ```bash
+   git clone https://github.com/sagartaunk/finance-tracker.git
+   cd finance-tracker
+   ```
+2. Install dependencies:
+   ```bash
+   pip install pandas matplotlib
+   ```
+3. Run the program:
+   ```bash
+   python finance_tracker.py
+   ```
+
+---
+
+## 📊 Sample Output
+
+### Summary Example:
+```
+Total Income: 50000.0
+Total Expenses: 15000.0
+Saved: 35000.0
+Savings Goal Target ( 20.0 % of income ): 10000.0
+Estimated Tax ( 10.0 % of income ): 5000.0
 ```
 
-## How to run
+### Pie Chart (Expenses by Category)
+Shows how your expenses are distributed across categories.
 
-```bash
-python finance_tracker.py
-```
+### Bar Chart (Expenses and Savings)
+Compares actual savings with the target savings goal.
 
-If it’s your first run and there are no CSV files, the program will ask for:
-- Income
-- Tax Rate (%)
-- Savings Goal (%)
+---
 
-It will then create these files:
-- `settings.csv` — stores your tax rate and savings goal
-- `transactions.csv` — stores all your income and expenses
+## 📌 Notes
+- This is a **beginner-level project**, meant for learning purposes.
+- Data is saved locally in CSV files, so deleting them will reset the tracker.
+- No database or GUI is used to keep things simple for Class 12 project requirements.
 
-## Files used
+---
 
-- `settings.csv`
-  - Columns: `tax_rate`, `savings_goal`
-- `transactions.csv`
-  - Columns: `Description`, `Amount`, `Category`
-  - Category is either `Income` or an expense category (Food, Transportation, Entertainment, Shopping, Others)
-
-## Using the menu
-
-When you run the program, you’ll see:
-
-```
-1. Add Transaction
-2. Add Income
-3. View Transactions
-4. Show Summary
-5. Show Pie Chart
-6. Show Bar Chart
-7. Show savings goal
-8. Set savings goal
-9. Set tax rate
-10. Show this menu
-11. Exit
-```
-
-Tips:
-- Use whole numbers or decimals for amounts (e.g., 1500 or 1500.50).
-- If you type an invalid value in the first-time setup, the program will use 0.0 for that value so it can continue.
-- Pie chart shows only expenses (no income). Percent labels are intentionally not shown.
-- Bar chart shows each expense category plus two bars:
-  - Actual Savings = Income − Total Expenses (not less than 0)
-  - Target Savings = Income × (Savings Goal %)
-
-## Summary details
-
-- Total Income = sum of all rows where Category = “Income”
-- Total Expenses = sum of all rows where Category is not “Income”
-- Saved = Income − Expenses
-- Savings Goal Target = Income × (Savings Goal %)
-- Estimated Tax = Income × (Tax Rate %)
-
-Note: These are simple calculations for learning purposes.
-
-## Resetting or starting over
-
-- Delete `transactions.csv` and/or `settings.csv` if you want to start fresh.
-- Run the program again and enter the initial values.
-
-## Example workflow
-
-1. Run the program
-2. Add your first income
-3. Add a few expenses (Food, Transportation, etc.)
-4. View Transactions
-5. Show Summary
-6. Draw charts (Pie/Bar)
-7. Adjust savings goal or tax rate if needed
-
-## License
-Free to use, edit, or share.
-
-- You can copy, modify, and distribute this project for any purpose (personal, educational, or commercial) without asking for permission.
-- Attribution to the authors is appreciated but not required.
-- Provided “as is”, without any warranty.
+## 📜 License
+This project is made for **educational purposes only**. Feel free to use or modify it for your own school projects!

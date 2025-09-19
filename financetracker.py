@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 
 print("Welcome to Finance Tracker\n")
 
-tax_rate = 10.0
-goal = 20.0
 
 try:
     settings = pd.read_csv("settings.csv")
@@ -12,18 +10,9 @@ try:
     goal = float(settings.iloc[0]["savings_goal"])
 except:
     print("Please set the following values")
-    try:
-        income = float(input("Income: "))
-    except:
-        income = 0.0
-    try:
-        tax_rate = float(input("Tax Rate (%): "))
-    except:
-        tax_rate = 0.0
-    try:
-        goal = float(input("Savings Goal (%): "))
-    except:
-        goal = 0.0
+    income = float(input("Income: "))
+    tax_rate = float(input("Tax Rate (%): "))
+    goal = float(input("Savings Goal (%): "))
     pd.DataFrame({"tax_rate": [tax_rate], "savings_goal": [goal]}).to_csv("settings.csv", index=False)
     transactions = pd.DataFrame({
         "Description": ["Initial Income"],
@@ -46,11 +35,7 @@ print("10. Show this menu")
 print("11. Exit\n")
 
 while True:
-    try:
-        choice = int(input("Please enter your choice (1-11): "))
-    except:
-        print("Please type a number between 1 and 11")
-        continue
+    choice = int(input("Please enter your choice (1-11): "))
 
     if choice == 1:
         print("\nPlease choose a category for your expense:")
@@ -59,10 +44,7 @@ while True:
         print("3. Entertainment")
         print("4. Shopping")
         print("5. Others")
-        try:
-            cat_num = int(input("Enter 1-5: "))
-        except:
-            cat_num = 5
+        cat_num = int(input("Enter 1-5: "))
         if cat_num == 1:
             category = "Food"
         elif cat_num == 2:
@@ -73,15 +55,11 @@ while True:
             category = "Shopping"
         else:
             category = "Others"
-        desc = input("Description: ").strip()
+        desc = input("Description: ")
         if desc == "":
             desc = category
-        while True:
-            try:
-                amt = float(input("Amount: "))
-                break
-            except:
-                print("Please type a number for amount")
+        amt = float(input("Amount: "))
+
         try:
             old = pd.read_csv("transactions.csv")
             new_row = pd.DataFrame({"Description": [desc], "Amount": [amt], "Category": [category]})
@@ -95,12 +73,7 @@ while True:
         src = input("Income source: ").strip()
         if src == "":
             src = "Income"
-        while True:
-            try:
-                amt = float(input("Amount: "))
-                break
-            except:
-                print("Please type a number for amount")
+        amt = float(input("Amount: "))
         try:
             old = pd.read_csv("transactions.csv")
             new_row = pd.DataFrame({"Description": [src], "Amount": [amt], "Category": ["Income"]})
@@ -117,8 +90,7 @@ while True:
                 print("No transactions yet.\n")
             else:
                 print("\nTransactions:")
-                print(d)
-                print()
+                print(d , "\n")
         except:
             print("No transactions yet.\n")
 
@@ -139,9 +111,8 @@ while True:
                 print("Saved:", float(saved))
                 print("Savings Goal Target (", goal, "% of income ):", float(target))
                 print("Estimated Tax (", tax_rate, "% of income ):", float(estimated_tax))
-                print()
         except:
-            print("No data to show.\n")
+            print("No data to show\n")
 
     elif choice == 5:
         try:
@@ -211,22 +182,12 @@ while True:
         print()
 
     elif choice == 8:
-        while True:
-            try:
-                goal = float(input("New savings goal (%): "))
-                break
-            except:
-                print("Please type a number")
+        goal = float(input("New savings goal (%): "))
         pd.DataFrame({"tax_rate": [tax_rate], "savings_goal": [goal]}).to_csv("settings.csv", index=False)
         print("Savings goal saved.\n")
 
     elif choice == 9:
-        while True:
-            try:
-                tax_rate = float(input("New tax rate (%): "))
-                break
-            except:
-                print("Please type a number")
+        tax_rate = float(input("New tax rate (%): "))
         pd.DataFrame({"tax_rate": [tax_rate], "savings_goal": [goal]}).to_csv("settings.csv", index=False)
         print("Tax rate saved.\n")
 
