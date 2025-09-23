@@ -86,8 +86,15 @@ while True:
             if d.empty:
                 print("No data to show.\n")
             else:
-                income = d[d["Category"] == "Income"]["Amount"].sum()
-                expenses = d[d["Category"] != "Income"]["Amount"].sum()
+                income = 0
+                expenses = 0
+                for i in range(len(data)):
+                    category = data["Category"].iloc[i]
+                    amount = float(data["Amount"].iloc[i])
+                    if category == "Income":
+                        income = income + amount
+                    else:
+                        expenses = expenses + amount
                 saved = income - expenses
                 target = income * (goal / 100.0)
                 estimated_tax = income * (tax_rate / 100.0)
