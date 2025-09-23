@@ -2,24 +2,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 print("Welcome to Finance Tracker\n")
+settings = pd.read_csv("settings.csv")
+tax_rate = float(settings.iloc[0]["tax_rate"])
+goal = float(settings.iloc[0]["savings_goal"])
 
-
-try:
-    settings = pd.read_csv("settings.csv")
-    tax_rate = float(settings.iloc[0]["tax_rate"])
-    goal = float(settings.iloc[0]["savings_goal"])
-except:
-    print("Please set the following values")
-    income = float(input("Income: "))
-    tax_rate = float(input("Tax Rate (%): "))
-    goal = float(input("Savings Goal (%): "))
-    pd.DataFrame({"tax_rate": [tax_rate], "savings_goal": [goal]}).to_csv("settings.csv", index=False)
-    transactions = pd.DataFrame({
-        "Description": ["Initial Income"],
-        "Amount": [income],
-        "Category": ["Income"]
-    })
-    transactions.to_csv("transactions.csv", index=False)
 
 print("\nPlease choose one of the following options to continue\n")
 print("1. Add Transaction")
