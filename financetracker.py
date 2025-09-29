@@ -91,109 +91,95 @@ while True:
         print("Income added.\n")
 
     elif choice == 3:
-        try:
-            d = pd.read_csv("transactions.csv")
-            if d.empty:
-                print("No transactions yet.\n")
-            else:
-                print("\nTransactions:")
-                print(d, "\n")
-        except:
+        d = pd.read_csv("transactions.csv")
+        if d.empty:
             print("No transactions yet.\n")
+        else:
+            print("\nTransactions:")
+            print(d, "\n")
 
     elif choice == 4:
-        try:
-            d = pd.read_csv("transactions.csv")
-            if d.empty:
-                print("No data to show.\n")
-            else:
-                income = 0
-                expenses = 0
-                for i in range(len(data)):
-                    category = data["Category"].iloc[i]
-                    amount = float(data["Amount"].iloc[i])
-                    if category == "Income":
-                        income = income + amount
-                    else:
-                        expenses = expenses + amount
-                saved = income - expenses
-                target = income * (goal / 100.0)
-                estimated_tax = income * (tax_rate / 100.0)
-                print("\nSummary:")
-                print("Total Income:", float(income))
-                print("Total Expenses:", float(expenses))
-                print("Saved:", float(saved))
-                print("Savings Goal Target (", goal, "% of income ):", float(target))
-                print(
-                    "Estimated Tax (", tax_rate, "% of income ):", float(estimated_tax)
-                )
-        except:
-            print("No data to show\n")
+        d = pd.read_csv("transactions.csv")
+        if d.empty:
+            print("No data to show.\n")
+        else:
+            income = 0
+            expenses = 0
+            for i in range(len(d)):
+                category = d["Category"].iloc[i]
+                amount = float(d["Amount"].iloc[i])
+                if category == "Income":
+                    income = income + amount
+                else:
+                    expenses = expenses + amount
+            saved = income - expenses
+            target = income * (goal / 100.0)
+            estimated_tax = income * (tax_rate / 100.0)
+            print("\nSummary:")
+            print("Total Income:", float(income))
+            print("Total Expenses:", float(expenses))
+            print("Saved:", float(saved))
+            print("Savings Goal Target (", goal, "% of income ):", float(target))
+            print("Estimated Tax (", tax_rate, "% of income ):", float(estimated_tax))
 
     elif choice == 5:
-        try:
-            d = pd.read_csv("transactions.csv")
-            exp_rows = []
-            for i in range(len(data)):
-                if data["Category"].iloc[i] != "Income":
-                    exp_rows.append(data.iloc[i])
-            exp = pd.DataFrame(exp_rows)
-            if exp.empty:
-                print("No expenses to plot yet.\n")
-                continue
-            cats = {}
-            for i, row in exp.iterrows():
-                k = row["Category"]
-                v = float(row["Amount"])
-                if k in cats:
-                    cats[k] += v
-                else:
-                    cats[k] = v
-            if sum(cats.values()) <= 0:
-                print("Nothing to plot yet.\n")
-                continue
-            plt.figure()
-            plt.pie(list(cats.values()), labels=list(cats.keys()))
-            plt.title("Expenses by Category")
-            plt.show()
-        except:
-            print("No data to show.\n")
+        d = pd.read_csv("transactions.csv")
+        exp_rows = []
+        for i in range(len(d)):
+            if d["Category"].iloc[i] != "Income":
+                exp_rows.append(d.iloc[i])
+        exp = pd.DataFrame(exp_rows)
+        if exp.empty:
+            print("No expenses to plot yet.\n")
+            continue
+        cats = {}
+        for i, row in exp.iterrows():
+            k = row["Category"]
+            v = float(row["Amount"])
+            if k in cats:
+                cats[k] += v
+            else:
+                cats[k] = v
+        if sum(cats.values()) <= 0:
+            print("Nothing to plot yet.\n")
+            continue
+        plt.figure()
+        plt.pie(list(cats.values()), labels=list(cats.keys()))
+        plt.title("Expenses by Category")
+        plt.show()
 
     elif choice == 6:
-        try:
-            d = pd.read_csv("transactions.csv")
-            if d.empty:
-                print("No data to show.\n")
-                continue
-            income = d[d["Category"] == "Income"]["Amount"].sum()
-            exp = d[d["Category"] != "Income"]
-            expenses_total = exp["Amount"].sum()
-            saved = income - expenses_total
-            target = income * (goal / 100.0)
-            cats = {}
-            for i, row in exp.iterrows():
-                k = row["Category"]
-                v = float(row["Amount"])
-                if k in cats:
-                    cats[k] += v
-                else:
-                    cats[k] = v
-            if saved > 0:
-                cats["Actual Savings"] = float(saved)
-            else:
-                cats["Actual Savings"] = 0.0
-            cats["Target Savings"] = float(target)
-            names = list(cats.keys())
-            values = list(cats.values())
-            plt.figure()
-            plt.bar(names, values)
-            plt.xticks(rotation=30, ha="right")
-            plt.ylabel("Amount")
-            plt.title("Expenses and Savings")
-            plt.tight_layout()
-            plt.show()
-        except:
+        d = pd.read_csv("transactions.csv")
+        if d.empty:
             print("No data to show.\n")
+            continue
+        income = d[d["Category"] == "Income"]["Amount"].sum()
+        exp = d[d["Category"] != "Income"]
+        expenses_total = exp["Amount"].sum()
+        saved = income - expenses_total
+        target = income * (goal / 100.0)
+        cats = {}
+        for i, row in exp.iterrows():
+            k = row["Category"]
+            v = float(row["Amount"])
+            if k in cats:
+                cats[k] += v
+            else:
+                cats[k] = v
+        if saved > 0:
+            cats["Actual Savings"] = float(saved)
+        else:
+            cats["Actual Savings"] = 0.0
+        cats["Target Savings"] = float(target)
+        names = list(cats.keys())
+        values = list(cats.values())
+        plt.figure()
+        plt.bar(names, values)
+        plt.xticks(rotation=30, ha="right")
+        plt.ylabel("Amount")
+        plt.title("Expenses and Savings")
+        plt.tight_layout()
+        plt.show()
 
     elif choice == 7:
         print("\nCurrent Settings:")
